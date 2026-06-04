@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronto Growth Model Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: rgba(255,255,255,0.04);
+            --border: rgba(255,255,255,0.08);
+            --border-hover: rgba(0,200,83,0.4);
+            --green: #00C853;
+            --green-dim: rgba(0,200,83,0.15);
+            --text: #f5f5f5;
+            --text-dim: #888;
+            --text-muted: #555;
+            --radius: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,157 +28,284 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: var(--text);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0,200,83,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,200,83,0.04) 0%, transparent 50%);
+            z-index: 0; pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            z-index: 0; pointer-events: none;
+            opacity: 0.5;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
-            text-align: center;
-            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 40px;
+            padding: 20px 0;
         }
 
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .header p {
-            font-size: 20px;
-            opacity: 0.95;
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .header-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .back-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+            border-color: var(--border-hover);
+        }
+
+        .scenario-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .scenario-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-dim);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .scenario-btn:hover {
+            border-color: var(--border-hover);
+            color: var(--text);
+            background: rgba(0,200,83,0.05);
+        }
+
+        .scenario-btn.active {
+            border-color: var(--green);
+            color: var(--green);
+            background: var(--green-dim);
         }
 
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 24px;
+            margin-bottom: 24px;
         }
 
         .panel {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            backdrop-filter: blur(20px);
         }
 
         .panel h2 {
-            color: #667eea;
-            margin-bottom: 25px;
-            font-size: 28px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
         .slider-group {
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .slider-label {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
-            font-weight: 600;
-            color: #555;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dim);
         }
 
         .slider-value {
-            color: #667eea;
-            font-size: 18px;
-            font-weight: bold;
+            color: var(--green);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         input[type="range"] {
             width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: #e0e0e0;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
             outline: none;
             -webkit-appearance: none;
+            cursor: pointer;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: var(--green);
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 12px rgba(0,200,83,0.4);
+            border: 2px solid rgba(0,200,83,0.6);
         }
 
         input[type="range"]::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: var(--green);
             cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(0,200,83,0.6);
+            box-shadow: 0 0 12px rgba(0,200,83,0.4);
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
         }
 
         .metric-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            transition: border-color 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-hover);
         }
 
         .metric-card h3 {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .metric-value {
-            font-size: 42px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .metric-change {
-            font-size: 14px;
-            opacity: 0.85;
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         .metric-change.positive {
-            color: #4ade80;
+            color: rgba(0,200,83,0.7);
         }
 
         .metric-change.negative {
             color: #f87171;
         }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
         .chart-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px);
         }
 
         .chart-container h2 {
-            color: #667eea;
-            margin-bottom: 25px;
-            font-size: 28px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         canvas {
@@ -170,64 +313,45 @@
         }
 
         .insights {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            backdrop-filter: blur(20px);
         }
 
         .insights h2 {
-            color: #667eea;
-            margin-bottom: 25px;
-            font-size: 28px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .insight-item {
-            padding: 20px;
-            background: #f8f9ff;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.02);
             border-radius: 12px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--green);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
         .insight-item h4 {
-            color: #667eea;
-            margin-bottom: 8px;
-            font-size: 18px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--green);
+            margin-bottom: 6px;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .insight-item p {
-            color: #666;
+            color: var(--text-dim);
             line-height: 1.6;
-        }
-
-        .scenario-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .scenario-btn {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .scenario-btn:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .scenario-btn.active {
-            background: #667eea;
-            color: white;
+            font-size: 13px;
         }
 
         @media (max-width: 1024px) {
@@ -235,13 +359,47 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .header-text h1 {
+                font-size: 22px;
+            }
+
+            .scenario-buttons {
+                flex-direction: column;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-value {
+                font-size: 26px;
+            }
+
+            body {
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Pronto Growth Model Calculator</h1>
-            <p>Interactive model showing how experiments compound over 90 days</p>
+            <div class="header-left">
+                <img src="pronto-logo.png" alt="Pronto" class="header-logo">
+                <div class="header-text">
+                    <h1>Growth Model Calculator</h1>
+                    <p>Interactive model showing how experiments compound over 90 days</p>
+                </div>
+            </div>
+            <a href="index.html" class="back-link">&larr; Portal</a>
         </div>
 
         <div class="scenario-buttons">
@@ -288,8 +446,8 @@
 
                 <div class="slider-group">
                     <div class="slider-label">
-                        <span>Average Order Value (₹)</span>
-                        <span class="slider-value" id="aov-value">₹400</span>
+                        <span>Average Order Value</span>
+                        <span class="slider-value" id="aov-value">&#8377;400</span>
                     </div>
                     <input type="range" id="aov" min="200" max="600" value="400" step="50" oninput="updateModel()">
                 </div>
@@ -368,7 +526,7 @@
                     <div class="metric-card">
                         <h3>Total New Users</h3>
                         <div class="metric-value" id="total-users">37,500</div>
-                        <div class="metric-change positive">from signups × conversion</div>
+                        <div class="metric-change positive">from signups x conversion</div>
                     </div>
 
                     <div class="metric-card">
@@ -385,8 +543,8 @@
 
                     <div class="metric-card">
                         <h3>Total Revenue (90 days)</h3>
-                        <div class="metric-value" id="total-revenue">₹6.75 Cr</div>
-                        <div class="metric-change positive">bookings × AOV</div>
+                        <div class="metric-value" id="total-revenue">&#8377;6.75 Cr</div>
+                        <div class="metric-change positive">bookings x AOV</div>
                     </div>
                 </div>
             </div>
@@ -449,7 +607,7 @@
             document.getElementById('conversion-value').textContent = (conversion * 100) + '%';
             document.getElementById('retention-value').textContent = (retention * 100) + '%';
             document.getElementById('recurring-value').textContent = (recurring * 100) + '%';
-            document.getElementById('aov-value').textContent = '₹' + aov;
+            document.getElementById('aov-value').textContent = '\u20B9' + aov;
             document.getElementById('frequency-value').textContent = frequency.toFixed(1);
             document.getElementById('fillrate-value').textContent = (fillrate * 100) + '%';
             document.getElementById('density-value').textContent = (density * 100) + '%';
@@ -472,7 +630,7 @@
             document.getElementById('total-users').textContent = totalUsers.toLocaleString();
             document.getElementById('retained-users').textContent = retainedUsers.toLocaleString();
             document.getElementById('total-bookings').textContent = totalBookings.toLocaleString();
-            document.getElementById('total-revenue').textContent = '₹' + (totalRevenue / 10000000).toFixed(2) + ' Cr';
+            document.getElementById('total-revenue').textContent = '\u20B9' + (totalRevenue / 10000000).toFixed(2) + ' Cr';
             document.getElementById('liquid-bookings').textContent = liquidBookings.toLocaleString();
             document.getElementById('health-score').textContent = healthScore + '/100';
             document.getElementById('ltv-cac').textContent = ltvCac + ':1';
@@ -502,26 +660,35 @@
                         {
                             label: 'New Users',
                             data: weeklyUsers,
-                            borderColor: '#667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            borderColor: '#00C853',
+                            backgroundColor: 'rgba(0,200,83,0.08)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#00C853'
                         },
                         {
                             label: 'Retained Users',
                             data: weeklyRetained,
-                            borderColor: '#764ba2',
-                            backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168,85,247,0.08)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#a855f7'
                         },
                         {
                             label: 'Bookings',
                             data: weeklyBookings,
-                            borderColor: '#f093fb',
-                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            borderColor: '#ec4899',
+                            backgroundColor: 'rgba(236,72,153,0.08)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#ec4899'
                         }
                     ]
                 },
@@ -531,15 +698,60 @@
                     plugins: {
                         legend: {
                             position: 'top',
+                            labels: {
+                                color: '#888',
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
                         },
                         tooltip: {
                             mode: 'index',
                             intersect: false,
+                            backgroundColor: 'rgba(10,10,10,0.9)',
+                            titleColor: '#f5f5f5',
+                            bodyColor: '#888',
+                            borderColor: 'rgba(255,255,255,0.08)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            titleFont: {
+                                family: 'Space Grotesk'
+                            },
+                            bodyFont: {
+                                family: 'Inter'
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255,255,255,0.04)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#555',
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255,255,255,0.04)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#555',
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                }
+                            }
                         }
                     }
                 }
@@ -552,67 +764,62 @@
             if (retention > 0.5) {
                 insights.push({
                     title: 'Strong Retention',
-                    text: `Your ${retention * 100}% retention rate is excellent. Retention compounds 3-5x more than acquisition. Focus on maintaining this through recurring bookings and resurrection campaigns.`
+                    text: 'Your ' + (retention * 100) + '% retention rate is excellent. Retention compounds 3-5x more than acquisition. Focus on maintaining this through recurring bookings and resurrection campaigns.'
                 });
             } else {
                 insights.push({
                     title: 'Retention Opportunity',
-                    text: `Your ${retention * 100}% retention rate has room for improvement. A 10% increase in retention would generate ${Math.round(signups * conversion * 0.1 * 3)} more bookings. Prioritize Experiment 5 (Recurring Booking Activation).`
+                    text: 'Your ' + (retention * 100) + '% retention rate has room for improvement. A 10% increase in retention would generate ' + Math.round(signups * conversion * 0.1 * 3) + ' more bookings. Prioritize Experiment 5 (Recurring Booking Activation).'
                 });
             }
 
             if (fillrate > 0.9) {
                 insights.push({
                     title: 'Healthy Marketplace',
-                    text: `${fillrate * 100}% fill rate indicates strong supply-demand balance. Your Pro Mentor program (Experiment 13) is working. Continue investing in supply-side growth.`
+                    text: (fillrate * 100) + '% fill rate indicates strong supply-demand balance. Your Pro Mentor program (Experiment 13) is working. Continue investing in supply-side growth.'
                 });
             } else {
                 insights.push({
                     title: 'Supply Constraint',
-                    text: `${fillrate * 100}% fill rate suggests supply constraints. Adding more demand will degrade experience. Prioritize Experiment 14 (Pro Supply Density) before scaling demand.`
+                    text: (fillrate * 100) + '% fill rate suggests supply constraints. Adding more demand will degrade experience. Prioritize Experiment 14 (Pro Supply Density) before scaling demand.'
                 });
             }
 
             if (density < 0.8) {
                 insights.push({
                     title: 'Density Gap',
-                    text: `Only ${density * 100}% of neighborhoods are above Pro density threshold. Focus on "Red" neighborhoods with targeted Pro recruitment and signing bonuses.`
+                    text: 'Only ' + (density * 100) + '% of neighborhoods are above Pro density threshold. Focus on "Red" neighborhoods with targeted Pro recruitment and signing bonuses.'
                 });
             }
 
             if (ltvCac > 3) {
                 insights.push({
                     title: 'Strong Unit Economics',
-                    text: `LTV:CAC ratio of ${ltvCac}:1 exceeds the 3:1 target. You can afford to increase CAC to accelerate growth. Consider making first booking FREE (Experiment 17).`
+                    text: 'LTV:CAC ratio of ' + ltvCac + ':1 exceeds the 3:1 target. You can afford to increase CAC to accelerate growth. Consider making first booking FREE (Experiment 17).'
                 });
             } else {
                 insights.push({
                     title: 'Unit Economics Warning',
-                    text: `LTV:CAC ratio of ${ltvCac}:1 is below target. Focus on retention and frequency to increase LTV before scaling acquisition spend.`
+                    text: 'LTV:CAC ratio of ' + ltvCac + ':1 is below target. Focus on retention and frequency to increase LTV before scaling acquisition spend.'
                 });
             }
 
             if (viralCoeff > 0.3) {
                 insights.push({
                     title: 'Viral Growth',
-                    text: `Viral coefficient of ${viralCoeff} indicates exponential growth potential. Your referral program (Experiment 1) is working. Double down on viral loops.`
+                    text: 'Viral coefficient of ' + viralCoeff + ' indicates exponential growth potential. Your referral program (Experiment 1) is working. Double down on viral loops.'
                 });
             }
 
             if (recurring > 0.3) {
                 insights.push({
                     title: 'Recurring Success',
-                    text: `${recurring * 100}% recurring booking adoption is strong. This creates predictable revenue and higher retention. Consider launching Pronto Plus subscription (Experiment 10).`
+                    text: (recurring * 100) + '% recurring booking adoption is strong. This creates predictable revenue and higher retention. Consider launching Pronto Plus subscription (Experiment 10).'
                 });
             }
 
             const container = document.getElementById('insights-container');
-            container.innerHTML = insights.map(i => `
-                <div class="insight-item">
-                    <h4>${i.title}</h4>
-                    <p>${i.text}</p>
-                </div>
-            `).join('');
+            container.innerHTML = insights.map(i => '<div class="insight-item"><h4>' + i.title + '</h4><p>' + i.text + '</p></div>').join('');
         }
 
         function setScenario(scenario) {

@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronto Neighborhood Community - Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: rgba(255,255,255,0.04);
+            --border: rgba(255,255,255,0.08);
+            --border-hover: rgba(0,200,83,0.4);
+            --green: #00C853;
+            --green-dim: rgba(0,200,83,0.15);
+            --text: #f5f5f5;
+            --text-dim: #888;
+            --text-muted: #555;
+            --radius: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,68 +28,152 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start;
+            padding: 40px 20px;
+            color: var(--text);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0,200,83,0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
             max-width: 1200px;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 4px;
         }
 
-        .header p {
-            font-size: 20px;
-            opacity: 0.9;
+        .header-logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+        }
+
+        .header-logo h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .header .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--green);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .header .back-link:hover {
+            opacity: 0.8;
         }
 
         .demo-section {
-            background: white;
-            border-radius: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .demo-section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 28px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            margin-bottom: 24px;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .phone-mockup {
             width: 375px;
             height: 750px;
-            background: #f5f5f5;
+            background: #111;
             border-radius: 40px;
-            padding: 20px;
+            padding: 16px;
             margin: 0 auto;
             position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.06),
+                0 0 60px rgba(0,200,83,0.08),
+                0 20px 60px rgba(0,0,0,0.5);
             overflow: hidden;
         }
 
         .phone-screen {
-            background: white;
-            border-radius: 30px;
+            background: #0d0d0d;
+            border-radius: 28px;
             height: 100%;
             overflow-y: auto;
             padding: 20px;
+        }
+
+        .phone-screen::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .phone-screen::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .phone-screen::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
         }
 
         .screen {
@@ -86,58 +186,73 @@
 
         .pronto-logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+        }
+
+        .pronto-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            margin-bottom: 6px;
         }
 
         .pronto-logo h3 {
-            color: #00C853;
-            font-size: 32px;
-            font-weight: bold;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--green);
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .community-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0,200,83,0.2) 0%, rgba(0,200,83,0.05) 100%);
+            border: 1px solid rgba(0,200,83,0.2);
+            color: var(--text);
+            padding: 24px;
+            border-radius: 16px;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .community-header h4 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .community-header .members {
-            font-size: 16px;
-            opacity: 0.95;
+            font-size: 14px;
+            color: var(--text-dim);
         }
 
         .community-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin: 20px 0;
         }
 
         .community-stat {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 14px 8px;
+            border-radius: 12px;
             text-align: center;
         }
 
         .community-stat .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green);
         }
 
         .community-stat .label {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 4px;
+            line-height: 1.3;
         }
 
         .chat-messages {
@@ -146,141 +261,157 @@
 
         .message {
             display: flex;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
             gap: 10px;
         }
 
         .message .avatar {
-            width: 40px;
-            height: 40px;
-            background: #667eea;
+            width: 36px;
+            height: 36px;
+            background: var(--green-dim);
+            border: 1px solid rgba(0,200,83,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
+            color: var(--green);
+            font-weight: 600;
+            font-size: 13px;
             flex-shrink: 0;
         }
 
         .message .content {
             flex: 1;
+            min-width: 0;
         }
 
-        .message .content .header {
+        .message .content .msg-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .message .content .name {
             font-weight: 600;
-            color: #333;
-            font-size: 14px;
+            color: var(--text);
+            font-size: 13px;
         }
 
         .message .content .time {
-            color: #999;
-            font-size: 12px;
+            color: var(--text-muted);
+            font-size: 11px;
         }
 
         .message .content .text {
-            background: #f5f5f5;
+            background: var(--surface);
+            border: 1px solid var(--border);
             padding: 12px;
             border-radius: 12px;
-            color: #555;
-            font-size: 14px;
+            color: var(--text-dim);
+            font-size: 13px;
             line-height: 1.5;
         }
 
         .message.admin .content .text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(0,200,83,0.15) 0%, rgba(0,200,83,0.05) 100%);
+            border: 1px solid rgba(0,200,83,0.2);
+            color: var(--text);
         }
 
         .message.system .content .text {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 4px solid #ffc107;
+            background: rgba(255,193,7,0.05);
+            border: 1px solid rgba(255,193,7,0.15);
+            border-left: 3px solid rgba(255,193,7,0.6);
+            color: #ccc;
         }
 
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
         }
 
         .btn-primary {
-            background: #00C853;
-            color: white;
+            background: var(--green);
+            color: #000;
         }
 
         .btn-primary:hover {
             background: #00A843;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,200,83,0.3);
         }
 
         .btn-secondary {
-            background: #667eea;
-            color: white;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
             margin-top: 10px;
         }
 
         .btn-secondary:hover {
-            background: #5568d3;
+            border-color: var(--border-hover);
+            background: rgba(255,255,255,0.06);
         }
 
         .nav-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 30px;
         }
 
         .nav-tab {
-            padding: 12px 24px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 10px;
+            padding: 10px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+            color: var(--text-dim);
+            font-family: 'Inter', sans-serif;
         }
 
         .nav-tab.active {
-            background: #667eea;
-            color: white;
+            background: var(--green-dim);
+            border-color: rgba(0,200,83,0.3);
+            color: var(--green);
         }
 
-        .nav-tab:hover {
-            background: #e0e0e0;
-        }
-
-        .nav-tab.active:hover {
-            background: #5568d3;
+        .nav-tab:hover:not(.active) {
+            border-color: rgba(255,255,255,0.15);
+            color: var(--text);
         }
 
         .impact-metrics {
-            background: #f5f5f5;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 24px;
         }
 
         .impact-metrics h3 {
-            color: #667eea;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
             margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .metric-row {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #e0e0e0;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
         }
 
         .metric-row:last-child {
@@ -288,40 +419,54 @@
         }
 
         .metric-row .label {
-            color: #666;
+            color: var(--text-dim);
             font-weight: 500;
+            font-size: 14px;
         }
 
         .metric-row .value {
-            color: #333;
-            font-weight: bold;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 14px;
+            text-align: right;
         }
 
         .metric-row .value.success {
-            color: #00C853;
+            color: var(--green);
         }
 
         .announcement {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(0,200,83,0.2) 0%, rgba(0,200,83,0.05) 100%);
+            border: 1px solid rgba(0,200,83,0.2);
+            color: var(--text);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 16px;
             margin: 20px 0;
         }
 
         .announcement h5 {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .announcement p {
-            opacity: 0.95;
-            margin-bottom: 15px;
+            color: var(--text-dim);
+            font-size: 13px;
+            margin-bottom: 14px;
+            line-height: 1.5;
         }
 
         .announcement .btn {
-            background: white;
-            color: #f5576c;
+            background: var(--green);
+            color: #000;
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        .announcement .btn:hover {
+            background: #00A843;
         }
 
         .quick-actions {
@@ -332,101 +477,259 @@
         }
 
         .quick-action {
-            background: #f5f5f5;
+            background: var(--surface);
+            border: 1px solid var(--border);
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 14px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .quick-action:hover {
-            background: #e0e0e0;
+            border-color: var(--border-hover);
+            box-shadow: 0 0 20px rgba(0,200,83,0.08);
             transform: translateY(-2px);
         }
 
         .quick-action .icon {
-            font-size: 32px;
-            margin-bottom: 10px;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background: var(--green-dim);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .quick-action .label {
-            font-size: 14px;
-            color: #555;
+        .quick-action .icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--green);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .quick-action .qlabel {
+            font-size: 13px;
+            color: var(--text-dim);
             font-weight: 600;
         }
 
         .member-list {
-            margin: 20px 0;
+            margin: 16px 0;
         }
 
         .member-item {
             display: flex;
             align-items: center;
             padding: 12px;
-            background: #f9f9f9;
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             margin-bottom: 8px;
             gap: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .member-item:hover {
+            border-color: rgba(255,255,255,0.12);
         }
 
         .member-item .avatar {
-            width: 45px;
-            height: 45px;
-            background: #667eea;
+            width: 40px;
+            height: 40px;
+            background: var(--green-dim);
+            border: 1px solid rgba(0,200,83,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
+            color: var(--green);
+            font-weight: 600;
+            font-size: 14px;
             flex-shrink: 0;
         }
 
         .member-item .info {
             flex: 1;
+            min-width: 0;
         }
 
         .member-item .info h6 {
-            font-size: 15px;
-            color: #333;
+            font-size: 14px;
+            color: var(--text);
             margin-bottom: 2px;
+            font-weight: 600;
         }
 
         .member-item .info p {
-            font-size: 12px;
-            color: #999;
+            font-size: 11px;
+            color: var(--text-muted);
         }
 
         .member-item .badge {
             padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .badge.admin {
-            background: #667eea;
-            color: white;
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid rgba(0,200,83,0.2);
         }
 
         .badge.active {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(0,200,83,0.08);
+            color: var(--green);
+            border: 1px solid rgba(0,200,83,0.15);
+        }
+
+        .section-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 24px 0 12px;
+        }
+
+        .event-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .event-card:hover {
+            border-color: rgba(255,255,255,0.12);
+        }
+
+        .event-card.past {
+            opacity: 0.5;
+        }
+
+        .event-card h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--green);
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .event-card .event-desc {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .event-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .event-tag {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .event-tag.completed {
+            background: var(--green-dim);
+            border-color: rgba(0,200,83,0.15);
+            color: var(--green);
+            text-align: center;
+            width: 100%;
+        }
+
+        .challenge-progress {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 14px;
+        }
+
+        .challenge-progress .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.06);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--green);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 32px;
+            body {
+                padding: 20px 12px;
+            }
+
+            .header-logo h1 {
+                font-size: 28px;
             }
 
             .demo-section {
-                padding: 20px;
+                padding: 20px 16px;
             }
 
             .phone-mockup {
                 width: 100%;
                 max-width: 375px;
+                height: 680px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                flex: 1;
+                text-align: center;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .community-stats {
+                gap: 6px;
+            }
+
+            .community-stat .value {
+                font-size: 17px;
+            }
+
+            .metric-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .metric-row .value {
+                text-align: left;
             }
         }
     </style>
@@ -434,8 +737,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Pronto Neighborhood Community</h1>
-            <p>Interactive Prototype - Experiment #20</p>
+            <div class="header-logo">
+                <img src="pronto-logo.png" alt="Pronto">
+                <h1>Pronto</h1>
+            </div>
+            <div class="subtitle">Neighborhood Community</div>
+            <a href="pronto-portal.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                Back to Portal
+            </a>
         </div>
 
         <div class="demo-section">
@@ -448,14 +758,14 @@
 
             <div class="phone-mockup">
                 <div class="phone-screen">
-                    <!-- Screen 1: Community Feed -->
                     <div id="feed" class="screen active">
                         <div class="pronto-logo">
+                            <img src="pronto-logo.png" alt="Pronto">
                             <h3>Pronto</h3>
                         </div>
                         <div class="community-header">
                             <h4>Prestige Lakeside Community</h4>
-                            <div class="members">247 members • HSR Layout</div>
+                            <div class="members">247 members &middot; HSR Layout</div>
                         </div>
 
                         <div class="community-stats">
@@ -464,7 +774,7 @@
                                 <div class="label">Bookings This Month</div>
                             </div>
                             <div class="community-stat">
-                                <div class="value">4.8★</div>
+                                <div class="value">4.8</div>
                                 <div class="label">Avg Rating</div>
                             </div>
                             <div class="community-stat">
@@ -474,22 +784,22 @@
                         </div>
 
                         <div class="announcement">
-                            <h5>🎉 Weekend Special!</h5>
-                            <p>Book any service this weekend and get ₹100 off. Use code: WEEKEND100</p>
+                            <h5>Weekend Special</h5>
+                            <p>Book any service this weekend and get Rs.100 off. Use code: WEEKEND100</p>
                             <button class="btn">Book Now</button>
                         </div>
 
-                        <h5 style="margin: 20px 0 15px;">Recent Messages</h5>
+                        <div class="section-label">Recent Messages</div>
                         <div class="chat-messages">
                             <div class="message admin">
                                 <div class="avatar">P</div>
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="msg-header">
                                         <span class="name">Pronto Team</span>
                                         <span class="time">10:30 AM</span>
                                     </div>
                                     <div class="text">
-                                        🧹 <strong>Cleaning Tip of the Day:</strong> Dust ceiling fans before mopping to avoid dust settling on clean floors. Your Pro will handle this automatically!
+                                        <strong>Cleaning Tip of the Day:</strong> Dust ceiling fans before mopping to avoid dust settling on clean floors. Your Pro will handle this automatically!
                                     </div>
                                 </div>
                             </div>
@@ -497,12 +807,12 @@
                             <div class="message">
                                 <div class="avatar">P</div>
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="msg-header">
                                         <span class="name">Priya Sharma</span>
                                         <span class="time">11:15 AM</span>
                                     </div>
                                     <div class="text">
-                                        Just had my weekly cleaning with Lakshmi. She's amazing! Highly recommend booking her if she's available in your area. ⭐⭐⭐⭐⭐
+                                        Just had my weekly cleaning with Lakshmi. She's amazing! Highly recommend booking her if she's available in your area.
                                     </div>
                                 </div>
                             </div>
@@ -510,7 +820,7 @@
                             <div class="message">
                                 <div class="avatar">R</div>
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="msg-header">
                                         <span class="name">Rahul Menon</span>
                                         <span class="time">11:42 AM</span>
                                     </div>
@@ -521,14 +831,14 @@
                             </div>
 
                             <div class="message system">
-                                <div class="avatar">🎉</div>
+                                <div class="avatar">S</div>
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="msg-header">
                                         <span class="name">Community Update</span>
                                         <span class="time">12:00 PM</span>
                                     </div>
                                     <div class="text">
-                                        Welcome to 3 new members who joined this week! 👋 Say hi to Anita (Block B), Vikram (Block D), and Meera (Block A).
+                                        Welcome to 3 new members who joined this week! Say hi to Anita (Block B), Vikram (Block D), and Meera (Block A).
                                     </div>
                                 </div>
                             </div>
@@ -536,12 +846,12 @@
                             <div class="message">
                                 <div class="avatar">M</div>
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="msg-header">
                                         <span class="name">Meera Iyer</span>
                                         <span class="time">12:30 PM</span>
                                     </div>
                                     <div class="text">
-                                        Thanks for the welcome! Just booked my first Pronto service. Excited to try it out! 🙌
+                                        Thanks for the welcome! Just booked my first Pronto service. Excited to try it out!
                                     </div>
                                 </div>
                             </div>
@@ -550,34 +860,38 @@
                         <button class="btn btn-primary">Join Conversation</button>
                     </div>
 
-                    <!-- Screen 2: Members -->
                     <div id="members" class="screen">
                         <div class="pronto-logo">
+                            <img src="pronto-logo.png" alt="Pronto">
                             <h3>Pronto</h3>
                         </div>
                         <div class="community-header">
                             <h4>Community Members</h4>
-                            <div class="members">247 members • Prestige Lakeside</div>
+                            <div class="members">247 members &middot; Prestige Lakeside</div>
                         </div>
 
                         <div class="quick-actions">
                             <div class="quick-action">
-                                <div class="icon">👥</div>
-                                <div class="label">Invite Neighbor</div>
+                                <div class="icon">
+                                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                </div>
+                                <div class="qlabel">Invite Neighbor</div>
                             </div>
                             <div class="quick-action">
-                                <div class="icon">🏆</div>
-                                <div class="label">Leaderboard</div>
+                                <div class="icon">
+                                    <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                </div>
+                                <div class="qlabel">Leaderboard</div>
                             </div>
                         </div>
 
-                        <h5 style="margin: 20px 0 15px;">Top Contributors</h5>
+                        <div class="section-label">Top Contributors</div>
                         <div class="member-list">
                             <div class="member-item">
                                 <div class="avatar">P</div>
                                 <div class="info">
                                     <h6>Priya Sharma</h6>
-                                    <p>Block C • 45 bookings • 12 referrals</p>
+                                    <p>Block C &middot; 45 bookings &middot; 12 referrals</p>
                                 </div>
                                 <div class="badge active">Top Member</div>
                             </div>
@@ -585,7 +899,7 @@
                                 <div class="avatar">R</div>
                                 <div class="info">
                                     <h6>Rahul Menon</h6>
-                                    <p>Block C • 38 bookings • 8 referrals</p>
+                                    <p>Block C &middot; 38 bookings &middot; 8 referrals</p>
                                 </div>
                                 <div class="badge active">Active</div>
                             </div>
@@ -593,7 +907,7 @@
                                 <div class="avatar">A</div>
                                 <div class="info">
                                     <h6>Anita Kulkarni</h6>
-                                    <p>Block B • 32 bookings • 15 referrals</p>
+                                    <p>Block B &middot; 32 bookings &middot; 15 referrals</p>
                                 </div>
                                 <div class="badge active">Top Referrer</div>
                             </div>
@@ -601,16 +915,16 @@
                                 <div class="avatar">V</div>
                                 <div class="info">
                                     <h6>Vikram Singh</h6>
-                                    <p>Block D • 28 bookings • 5 referrals</p>
+                                    <p>Block D &middot; 28 bookings &middot; 5 referrals</p>
                                 </div>
                                 <div class="badge active">Active</div>
                             </div>
                         </div>
 
-                        <h5 style="margin: 20px 0 15px;">Community Admins</h5>
+                        <div class="section-label">Community Admins</div>
                         <div class="member-list">
                             <div class="member-item">
-                                <div class="avatar" style="background: #667eea;">P</div>
+                                <div class="avatar">P</div>
                                 <div class="info">
                                     <h6>Pronto Team</h6>
                                     <p>Official community manager</p>
@@ -618,10 +932,10 @@
                                 <div class="badge admin">Admin</div>
                             </div>
                             <div class="member-item">
-                                <div class="avatar" style="background: #667eea;">S</div>
+                                <div class="avatar">S</div>
                                 <div class="info">
                                     <h6>Suresh Kumar</h6>
-                                    <p>RWA President • Block A</p>
+                                    <p>RWA President &middot; Block A</p>
                                 </div>
                                 <div class="badge admin">Admin</div>
                             </div>
@@ -630,9 +944,9 @@
                         <button class="btn btn-secondary" onclick="showScreen('feed')">Back to Feed</button>
                     </div>
 
-                    <!-- Screen 3: Events & Challenges -->
                     <div id="events" class="screen">
                         <div class="pronto-logo">
+                            <img src="pronto-logo.png" alt="Pronto">
                             <h3>Pronto</h3>
                         </div>
                         <div class="community-header">
@@ -640,62 +954,50 @@
                             <div class="members">Prestige Lakeside Community</div>
                         </div>
 
-                        <div class="announcement" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                            <h5>🏆 Monthly Challenge</h5>
+                        <div class="announcement">
+                            <h5>Monthly Challenge</h5>
                             <p>Complete 4 bookings this month and win a FREE deep cleaning service!</p>
-                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 15px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <div class="challenge-progress">
+                                <div class="progress-header">
                                     <span>Your Progress</span>
                                     <span>3/4 bookings</span>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; overflow: hidden;">
-                                    <div style="background: white; height: 100%; width: 75%; border-radius: 5px;"></div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%;"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <h5 style="margin: 20px 0 15px;">Upcoming Events</h5>
-                        <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
-                            <h6 style="color: #667eea; margin-bottom: 8px;">🧹 Spring Cleaning Week</h6>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">March 15-21 • Special discounts on deep cleaning services</p>
-                            <div style="display: flex; gap: 10px;">
-                                <div style="background: white; padding: 8px 12px; border-radius: 8px; font-size: 13px;">
-                                    📅 6 days left
-                                </div>
-                                <div style="background: white; padding: 8px 12px; border-radius: 8px; font-size: 13px;">
-                                    👥 89 participating
-                                </div>
+                        <div class="section-label">Upcoming Events</div>
+                        <div class="event-card">
+                            <h6>Spring Cleaning Week</h6>
+                            <div class="event-desc">March 15-21 &middot; Special discounts on deep cleaning services</div>
+                            <div class="event-tags">
+                                <div class="event-tag">6 days left</div>
+                                <div class="event-tag">89 participating</div>
                             </div>
                         </div>
 
-                        <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
-                            <h6 style="color: #667eea; margin-bottom: 8px;">🎉 Community Meetup</h6>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">March 25, 6 PM • Clubhouse • Meet your neighbors & Pronto Pros</p>
-                            <div style="display: flex; gap: 10px;">
-                                <div style="background: white; padding: 8px 12px; border-radius: 8px; font-size: 13px;">
-                                    📅 12 days left
-                                </div>
-                                <div style="background: white; padding: 8px 12px; border-radius: 8px; font-size: 13px;">
-                                    👥 45 attending
-                                </div>
+                        <div class="event-card">
+                            <h6>Community Meetup</h6>
+                            <div class="event-desc">March 25, 6 PM &middot; Clubhouse &middot; Meet your neighbors & Pronto Pros</div>
+                            <div class="event-tags">
+                                <div class="event-tag">12 days left</div>
+                                <div class="event-tag">45 attending</div>
                             </div>
                         </div>
 
-                        <h5 style="margin: 20px 0 15px;">Past Challenges</h5>
-                        <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 15px; opacity: 0.7;">
-                            <h6 style="color: #667eea; margin-bottom: 8px;">✅ Cleanest Balcony Contest</h6>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">Winner: Anita Kulkarni (Block B) • 67 participants</p>
-                            <div style="background: white; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;">
-                                🏆 Completed • Feb 2026
-                            </div>
+                        <div class="section-label">Past Challenges</div>
+                        <div class="event-card past">
+                            <h6>Cleanest Balcony Contest</h6>
+                            <div class="event-desc">Winner: Anita Kulkarni (Block B) &middot; 67 participants</div>
+                            <div class="event-tag completed">Completed &middot; Feb 2026</div>
                         </div>
 
-                        <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 15px; opacity: 0.7;">
-                            <h6 style="color: #667eea; margin-bottom: 8px;">✅ Refer-a-Neighbor Week</h6>
-                            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">142 referrals • 89 new members joined</p>
-                            <div style="background: white; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;">
-                                🏆 Completed • Jan 2026
-                            </div>
+                        <div class="event-card past">
+                            <h6>Refer-a-Neighbor Week</h6>
+                            <div class="event-desc">142 referrals &middot; 89 new members joined</div>
+                            <div class="event-tag completed">Completed &middot; Jan 2026</div>
                         </div>
 
                         <button class="btn btn-secondary" onclick="showScreen('feed')">Back to Feed</button>
@@ -763,7 +1065,7 @@
         </div>
 
         <div class="demo-section">
-            <h2>Why This Works (Elena Verna's Advice)</h2>
+            <h2>Why This Works</h2>
             <div class="impact-metrics">
                 <h3>Community as Growth Engine</h3>
                 <div class="metric-row">
