@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronto Referral Program - Growth Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .demo-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .phone-mockup {
+            width: 375px;
+            height: 700px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            padding: 20px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            background: white;
+            border-radius: 30px;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .pronto-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pronto-logo h3 {
+            color: #00C853;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .booking-complete {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            background: #00C853;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .booking-complete h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .booking-complete p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .referral-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .referral-card h5 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .referral-card p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .referral-code {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00C853;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00A843;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .share-option {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-option:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .share-option .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .share-option .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .referral-dashboard {
+            padding: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .referral-list {
+            margin: 20px 0;
+        }
+
+        .referral-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .referral-item .user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .referral-item .avatar {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .referral-item .info h6 {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .referral-item .info p {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .referral-item .reward {
+            color: #00C853;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .leaderboard {
+            margin: 20px 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .leaderboard-item.highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .leaderboard-item .rank {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 15px;
+            width: 40px;
+        }
+
+        .leaderboard-item .user-info {
+            flex: 1;
+        }
+
+        .leaderboard-item .user-info h6 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .leaderboard-item .user-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .leaderboard-item .referrals {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .metrics-panel {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .metrics-panel h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-row .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .metric-row .value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .metric-row .value.success {
+            color: #00C853;
+        }
+
+        .implementation-guide {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .implementation-guide h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .implementation-guide ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .implementation-guide li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .implementation-guide li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00C853;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-tab.active:hover {
+            background: #5568d3;
+        }
+
+        .flow-diagram {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .flow-step .number {
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .flow-step .content h5 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .flow-step .content p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 24px;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .demo-section {
+                padding: 20px;
+            }
+
+            .phone-mockup {
+                width: 100%;
+                max-width: 375px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Pronto Referral Program</h1>
+            <p>Growth Marketing Prototype - Double-Sided Referral System</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>Interactive Demo</h2>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showScreen('post-booking')">Post-Booking Prompt</button>
+                <button class="nav-tab" onclick="showScreen('share')">Share Flow</button>
+                <button class="nav-tab" onclick="showScreen('dashboard')">Referral Dashboard</button>
+                <button class="nav-tab" onclick="showScreen('leaderboard')">Leaderboard</button>
+            </div>
+
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <!-- Screen 1: Post-Booking Prompt -->
+                    <div id="post-booking" class="screen active">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="booking-complete">
+                            <div class="check-icon">✓</div>
+                            <h4>Booking Complete!</h4>
+                            <p>Your home is sparkling clean. Rate your experience:</p>
+                            <div style="font-size: 32px; margin: 20px 0;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div class="referral-card">
+                            <h5>Love Pronto?</h5>
+                            <p>Refer a friend and both get ₹100 off your next booking!</p>
+                            <div class="referral-code">PRONTO2024</div>
+                            <button class="btn btn-primary" onclick="showScreen('share')">Share & Earn ₹100</button>
+                            <button class="btn btn-secondary" onclick="showToast('Maybe later!')">Maybe Later</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 2: Share Flow -->
+                    <div id="share" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <h4 style="text-align: center; margin: 20px 0;">Share Your Referral Code</h4>
+                        <div class="referral-card">
+                            <p style="margin-bottom: 10px;">Your friend gets:</p>
+                            <h5>₹100 OFF</h5>
+                            <p>first booking</p>
+                            <p style="margin-top: 15px; margin-bottom: 10px;">You get:</p>
+                            <h5>₹100 CREDIT</h5>
+                            <p>when they book</p>
+                        </div>
+                        <div class="referral-code" style="background: #f0f0f0; color: #667eea;">
+                            PRONTO2024
+                        </div>
+                        <button class="btn btn-primary" onclick="copyCode()">📋 Copy Code</button>
+                        <h5 style="text-align: center; margin: 20px 0 15px;">Share via:</h5>
+                        <div class="share-options">
+                            <div class="share-option" onclick="shareVia('whatsapp')">
+                                <div class="icon">💬</div>
+                                <div class="label">WhatsApp</div>
+                            </div>
+                            <div class="share-option" onclick="shareVia('sms')">
+                                <div class="icon">📱</div>
+                                <div class="label">SMS</div>
+                            </div>
+                            <div class="share-option" onclick="shareVia('email')">
+                                <div class="icon">📧</div>
+                                <div class="label">Email</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="showScreen('post-booking')">← Back</button>
+                    </div>
+
+                    <!-- Screen 3: Referral Dashboard -->
+                    <div id="dashboard" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="referral-dashboard">
+                            <h4 style="margin-bottom: 20px;">Your Referrals</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="value">7</div>
+                                    <div class="label">Friends Invited</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">5</div>
+                                    <div class="label">Bookings Made</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">₹500</div>
+                                    <div class="label">Earned</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">#12</div>
+                                    <div class="label">Your Rank</div>
+                                </div>
+                            </div>
+                            <div class="referral-card">
+                                <h5>Refer 3 more friends</h5>
+                                <p>and unlock a FREE booking worth ₹400!</p>
+                                <button class="btn btn-primary" onclick="showScreen('share')">Invite Now</button>
+                            </div>
+                            <h5 style="margin: 20px 0 15px;">Recent Referrals</h5>
+                            <div class="referral-list">
+                                <div class="referral-item">
+                                    <div class="user">
+                                        <div class="avatar">P</div>
+                                        <div class="info">
+                                            <h6>Priya Sharma</h6>
+                                            <p>Booked 2 days ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="reward">+₹100</div>
+                                </div>
+                                <div class="referral-item">
+                                    <div class="user">
+                                        <div class="avatar">R</div>
+                                        <div class="info">
+                                            <h6>Rahul Kumar</h6>
+                                            <p>Booked 5 days ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="reward">+₹100</div>
+                                </div>
+                                <div class="referral-item">
+                                    <div class="user">
+                                        <div class="avatar">A</div>
+                                        <div class="info">
+                                            <h6>Anita Desai</h6>
+                                            <p>Signed up, not booked yet</p>
+                                        </div>
+                                    </div>
+                                    <div class="reward" style="color: #999;">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Screen 4: Leaderboard -->
+                    <div id="leaderboard" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="referral-dashboard">
+                            <h4 style="margin-bottom: 10px;">🏆 Top Referrers</h4>
+                            <p style="color: #666; margin-bottom: 20px;">This month in Bangalore</p>
+                            <div class="leaderboard">
+                                <div class="leaderboard-item">
+                                    <div class="rank">1</div>
+                                    <div class="user-info">
+                                        <h6>Sneha Patel</h6>
+                                        <p>Whitefield</p>
+                                    </div>
+                                    <div class="referrals">47 referrals</div>
+                                </div>
+                                <div class="leaderboard-item">
+                                    <div class="rank">2</div>
+                                    <div class="user-info">
+                                        <h6>Vikram Singh</h6>
+                                        <p>Koramangala</p>
+                                    </div>
+                                    <div class="referrals">38 referrals</div>
+                                </div>
+                                <div class="leaderboard-item">
+                                    <div class="rank">3</div>
+                                    <div class="user-info">
+                                        <h6>Meera Iyer</h6>
+                                        <p>Indiranagar</p>
+                                    </div>
+                                    <div class="referrals">32 referrals</div>
+                                </div>
+                                <div class="leaderboard-item highlight">
+                                    <div class="rank">12</div>
+                                    <div class="user-info">
+                                        <h6>You</h6>
+                                        <p>HSR Layout</p>
+                                    </div>
+                                    <div class="referrals">7 referrals</div>
+                                </div>
+                            </div>
+                            <div class="referral-card" style="margin-top: 20px;">
+                                <h5>🎯 Weekly Challenge</h5>
+                                <p>Refer 5 friends this week and win ₹500 bonus!</p>
+                                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span>Progress</span>
+                                        <span>2/5</span>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: white; height: 100%; width: 40%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Referral Flow Diagram</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="number">1</div>
+                    <div class="content">
+                        <h5>User Completes Booking</h5>
+                        <p>After successful service delivery, user rates their experience (⭐⭐⭐⭐⭐)</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">
+                    <div class="number">2</div>
+                    <div class="content">
+                        <h5>Referral Prompt Appears</h5>
+                        <p>"Love Pronto? Refer a friend and both get ₹100" with unique referral code</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">
+                    <div class="number">3</div>
+                    <div class="content">
+                        <h5>User Shares via WhatsApp/SMS/Email</h5>
+                        <p>One-tap sharing with pre-filled message: "Get ₹100 off your first Pronto booking with code PRONTO2024"</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">
+                    <div class="number">4</div>
+                    <div class="content">
+                        <h5>Friend Signs Up & Books</h5>
+                        <p>Friend uses referral code during signup, gets ₹100 off first booking</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">
+                    <div class="number">5</div>
+                    <div class="content">
+                        <h5>Both Users Rewarded</h5>
+                        <p>Referrer gets ₹100 credit, referee gets ₹100 discount. Both receive push notifications</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">
+                    <div class="number">6</div>
+                    <div class="content">
+                        <h5>Viral Loop Continues</h5>
+                        <p>New user becomes referrer, cycle repeats. Dashboard tracks referrals, earnings, and leaderboard rank</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Expected Impact Metrics</h2>
+            <div class="metrics-panel">
+                <h3>90-Day Projections (Based on 500K User Base)</h3>
+                <div class="metric-row">
+                    <span class="label">Referral Program Adoption Rate</span>
+                    <span class="value success">25% (125,000 users)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Average Referrals per Participant</span>
+                    <span class="value success">3.2 referrals</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Total Referral Signups</span>
+                    <span class="value success">400,000 signups</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Referral Signup-to-Booking Conversion</span>
+                    <span class="value success">45% (180,000 bookings)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Viral Coefficient (K-factor)</span>
+                    <span class="value success">0.36 (exponential growth)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Cost per Acquisition (Referral)</span>
+                    <span class="value success">₹150 (vs. ₹250 paid ads)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Referral User Retention (30-day)</span>
+                    <span class="value success">55% (vs. 35% organic)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Total Referral Program Cost</span>
+                    <span class="value">₹27 Crore</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Revenue from Referral Users (90 days)</span>
+                    <span class="value success">₹108 Crore</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">ROI</span>
+                    <span class="value success">4:1 (300% return)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Implementation Checklist</h2>
+            <div class="implementation-guide">
+                <h3>Week 1-2: Build Phase</h3>
+                <ul>
+                    <li>Design referral program mechanics (double-sided, ₹100 each)</li>
+                    <li>Build unique referral code generation system</li>
+                    <li>Create referral tracking and attribution logic</li>
+                    <li>Design in-app referral dashboard UI</li>
+                    <li>Implement post-booking referral prompt</li>
+                    <li>Build share functionality (WhatsApp, SMS, Email)</li>
+                    <li>Set up reward distribution system</li>
+                    <li>Create leaderboard and gamification features</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">Week 3: Testing Phase</h3>
+                <ul>
+                    <li>Internal QA testing of referral flow</li>
+                    <li>A/B test referral messaging (copy, placement, timing)</li>
+                    <li>Test reward distribution and fraud prevention</li>
+                    <li>Beta launch with 1,000 power users</li>
+                    <li>Collect feedback and iterate</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">Week 4: Launch Phase</h3>
+                <ul>
+                    <li>Full rollout to all 500K+ users</li>
+                    <li>Push notification campaign announcing referral program</li>
+                    <li>Email campaign to existing users</li>
+                    <li>In-app banners and prompts</li>
+                    <li>Set up analytics dashboard for growth team</li>
+                    <li>Monitor key metrics and optimize</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">Ongoing: Optimization</h3>
+                <ul>
+                    <li>Weekly cohort analysis of referral users</li>
+                    <li>A/B test reward amounts (₹75 vs. ₹100 vs. ₹150)</li>
+                    <li>Test different prompt timings (immediate vs. 24h delay)</li>
+                    <li>Optimize share message copy and creative</li>
+                    <li>Launch monthly referral challenges and contests</li>
+                    <li>Expand to neighborhood-based leaderboards</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Key Success Factors</h2>
+            <div class="implementation-guide">
+                <h3>Why This Will Work for Pronto</h3>
+                <ul>
+                    <li><strong>High-Trust Category:</strong> House help requires trust. People trust friends/family recommendations 3x more than ads</li>
+                    <li><strong>Existing User Base:</strong> 500K+ satisfied users (4.5★ rating) are an untapped distribution channel</li>
+                    <li><strong>Double-Sided Rewards:</strong> Both referrer and referee benefit, increasing conversion by 2-3x vs. single-sided</li>
+                    <li><strong>Competitive Gap:</strong> Urban Company and BookMyBai lack structured referral mechanics</li>
+                    <li><strong>Viral Potential:</strong> House help is a common need in urban India, especially in apartment complexes and gated communities</li>
+                    <li><strong>Low CAC:</strong> Referral CAC (₹150) is 40% lower than paid ads (₹250)</li>
+                    <li><strong>Higher Retention:</strong> Referred users have 55% 30-day retention vs. 35% organic users</li>
+                    <li><strong>Compounding Growth:</strong> Viral coefficient of 0.36 means exponential user growth over time</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Technical Architecture</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="number">1</div>
+                    <div class="content">
+                        <h5>Referral Code Generation</h5>
+                        <p>Unique alphanumeric codes (e.g., PRONTO2024) generated per user, stored in database with user_id mapping</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="number">2</div>
+                    <div class="content">
+                        <h5>Attribution Tracking</h5>
+                        <p>When new user signs up with code, create referral_attribution record linking referrer_id and referee_id</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="number">3</div>
+                    <div class="content">
+                        <h5>Event Triggers</h5>
+                        <p>Listen for booking_completed event. When referee completes first booking, trigger reward distribution</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="number">4</div>
+                    <div class="content">
+                        <h5>Reward Distribution</h5>
+                        <p>Add ₹100 credit to referrer's wallet, send push notification. Referee discount applied at checkout</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="number">5</div>
+                    <div class="content">
+                        <h5>Fraud Prevention</h5>
+                        <p>Device fingerprinting, phone number verification, rate limiting (max 50 referrals/day), manual review for suspicious patterns</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="number">6</div>
+                    <div class="content">
+                        <h5>Analytics & Reporting</h5>
+                        <p>Track referral_signups, referral_bookings, reward_distributed, viral_coefficient in real-time dashboard</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(screenId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText('PRONTO2024');
+            showToast('✓ Code copied! Share with friends');
+        }
+
+        function shareVia(platform) {
+            const messages = {
+                whatsapp: 'Opening WhatsApp...',
+                sms: 'Opening SMS...',
+                email: 'Opening Email...'
+            };
+            showToast(messages[platform]);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

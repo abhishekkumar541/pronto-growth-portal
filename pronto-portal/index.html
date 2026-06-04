@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronto Growth Marketing Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .hero h1 { font-size: 52px; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .hero p { font-size: 20px; opacity: 0.95; max-width: 700px; margin: 0 auto; }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        .stat {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+        .stat .value { font-size: 32px; font-weight: bold; }
+        .stat .label { font-size: 13px; opacity: 0.85; margin-top: 5px; }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+        .card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .card .tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .card .cta {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .experts {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 50px;
+        }
+        .experts h2 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+        .expert {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 12px;
+        }
+        .expert .name { font-weight: 700; font-size: 14px; color: #333; margin-bottom: 5px; }
+        .expert .company { font-size: 12px; color: #667eea; }
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        .footer a { color: white; text-decoration: underline; }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .cards-grid { grid-template-columns: 1fr; }
+            .experts-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Pronto Growth Portal</h1>
+            <p>A comprehensive growth marketing strategy for India's fastest-growing house help platform — 20 experiments, 4 prototypes, expert-validated</p>
+            <div class="badge">v2.0 — Expert-Enhanced with Lenny's Podcast Product Experts</div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="value">20</div>
+                <div class="label">Experiments</div>
+            </div>
+            <div class="stat">
+                <div class="value">4</div>
+                <div class="label">Prototypes</div>
+            </div>
+            <div class="stat">
+                <div class="value">5</div>
+                <div class="label">Experts Consulted</div>
+            </div>
+            <div class="stat">
+                <div class="value">₹6.75Cr</div>
+                <div class="label">90-Day Revenue Target</div>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <a href="pronto-growth-playbook.md" class="card">
+                <div class="icon">📘</div>
+                <h3>Growth Playbook v2</h3>
+                <p>Complete strategic document with 20 experiments across 11 parts — supply-side growth, network effects, competitive moat, and 90-day execution plan.</p>
+                <span class="tag">Strategy</span>
+                <span class="tag">20 Experiments</span>
+                <span class="tag">1,000+ Lines</span>
+                <br><span class="cta">Read Playbook →</span>
+            </a>
+
+            <a href="pronto-growth-model.html" class="card">
+                <div class="icon">📊</div>
+                <h3>Growth Model Calculator</h3>
+                <p>Interactive calculator with 12 adjustable sliders showing how experiments compound over 90 days. Includes charts, scenarios, and auto-generated insights.</p>
+                <span class="tag">Interactive</span>
+                <span class="tag">Charts</span>
+                <span class="tag">3 Scenarios</span>
+                <br><span class="cta">Open Calculator →</span>
+            </a>
+
+            <a href="pronto-referral-prototype.html" class="card">
+                <div class="icon">🔗</div>
+                <h3>Referral Program Prototype</h3>
+                <p>Working demo of double-sided referral system — post-booking prompt, share flow, referral dashboard, and leaderboard with gamification.</p>
+                <span class="tag">Prototype</span>
+                <span class="tag">ICE: 9.0</span>
+                <span class="tag">4 Screens</span>
+                <br><span class="cta">View Prototype →</span>
+            </a>
+
+            <a href="pronto-neighborhood-prototype.html" class="card">
+                <div class="icon">🏘️</div>
+                <h3>Neighborhood Social Proof</h3>
+                <p>Interactive demo showing "247 neighbors use Pronto" during signup — neighborhood dashboard, live activity feed, and local testimonials.</p>
+                <span class="tag">Prototype</span>
+                <span class="tag">ICE: 7.8</span>
+                <span class="tag">3 Screens</span>
+                <br><span class="cta">View Prototype →</span>
+            </a>
+
+            <a href="pronto-pro-mentor-prototype.html" class="card">
+                <div class="icon">👷</div>
+                <h3>Pro Mentor Dashboard</h3>
+                <p>Supply-side growth engine based on Lyft's playbook — mentor dashboard, onboarding sessions, and recruiter mode for Pro acquisition.</p>
+                <span class="tag">Prototype</span>
+                <span class="tag">ICE: 9.2</span>
+                <span class="tag">Supply-Side</span>
+                <br><span class="cta">View Prototype →</span>
+            </a>
+
+            <a href="pronto-community-prototype.html" class="card">
+                <div class="icon">💬</div>
+                <h3>Neighborhood Community</h3>
+                <p>WhatsApp-based community per society — community feed, member leaderboard, events & challenges, and word-of-mouth growth loops.</p>
+                <span class="tag">Prototype</span>
+                <span class="tag">ICE: 7.5</span>
+                <span class="tag">Retention</span>
+                <br><span class="cta">View Prototype →</span>
+            </a>
+        </div>
+
+        <div class="experts">
+            <h2>Expert Panel (Lenny's Podcast)</h2>
+            <div class="experts-grid">
+                <div class="expert">
+                    <div class="name">Casey Winters</div>
+                    <div class="company">Grubhub / Airbnb / Pinterest</div>
+                </div>
+                <div class="expert">
+                    <div class="name">Ben Lauzier</div>
+                    <div class="company">Lyft (#30) / Thumbtack</div>
+                </div>
+                <div class="expert">
+                    <div class="name">Dan Hockenmaier</div>
+                    <div class="company">Faire / Thumbtack</div>
+                </div>
+                <div class="expert">
+                    <div class="name">Albert Cheng</div>
+                    <div class="company">Duolingo / Grammarly / Chess.com</div>
+                </div>
+                <div class="expert">
+                    <div class="name">Elena Verna</div>
+                    <div class="company">Lovable ($200M ARR)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Built for Pronto Growth Marketing Role — June 2026</p>
+            <p style="margin-top: 10px;"><a href="https://github.com/Diablopop/product-experts-skill" target="_blank">View on GitHub</a></p>
+        </div>
+    </div>
+</body>
+</html>

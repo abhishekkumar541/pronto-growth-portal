@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronto Growth Model Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 28px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .slider-group {
+            margin-bottom: 30px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .slider-value {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .metric-card h3 {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-change {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .metric-change.positive {
+            color: #4ade80;
+        }
+
+        .metric-change.negative {
+            color: #f87171;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .chart-container h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        .insights {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .insights h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        .insight-item {
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .insight-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .insight-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .scenario-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .scenario-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .scenario-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .scenario-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pronto Growth Model Calculator</h1>
+            <p>Interactive model showing how experiments compound over 90 days</p>
+        </div>
+
+        <div class="scenario-buttons">
+            <button class="scenario-btn active" onclick="setScenario('conservative')">Conservative</button>
+            <button class="scenario-btn" onclick="setScenario('realistic')">Realistic</button>
+            <button class="scenario-btn" onclick="setScenario('optimistic')">Optimistic</button>
+        </div>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2>Demand-Side Inputs</h2>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>New User Signups (90 days)</span>
+                        <span class="slider-value" id="signups-value">50,000</span>
+                    </div>
+                    <input type="range" id="signups" min="10000" max="100000" value="50000" step="5000" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Signup-to-Booking Conversion</span>
+                        <span class="slider-value" id="conversion-value">75%</span>
+                    </div>
+                    <input type="range" id="conversion" min="40" max="90" value="75" step="5" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>30-Day Retention Rate</span>
+                        <span class="slider-value" id="retention-value">50%</span>
+                    </div>
+                    <input type="range" id="retention" min="20" max="70" value="50" step="5" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Recurring Booking Adoption</span>
+                        <span class="slider-value" id="recurring-value">30%</span>
+                    </div>
+                    <input type="range" id="recurring" min="10" max="50" value="30" step="5" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Average Order Value (₹)</span>
+                        <span class="slider-value" id="aov-value">₹400</span>
+                    </div>
+                    <input type="range" id="aov" min="200" max="600" value="400" step="50" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Bookings per User per Month</span>
+                        <span class="slider-value" id="frequency-value">3.0</span>
+                    </div>
+                    <input type="range" id="frequency" min="1" max="6" value="3" step="0.5" oninput="updateModel()">
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Supply-Side Inputs</h2>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pro Fill Rate</span>
+                        <span class="slider-value" id="fillrate-value">95%</span>
+                    </div>
+                    <input type="range" id="fillrate" min="70" max="99" value="95" step="1" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pro Density (% neighborhoods above threshold)</span>
+                        <span class="slider-value" id="density-value">80%</span>
+                    </div>
+                    <input type="range" id="density" min="50" max="95" value="80" step="5" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pro Churn Rate (monthly)</span>
+                        <span class="slider-value" id="prochurn-value">8%</span>
+                    </div>
+                    <input type="range" id="prochurn" min="5" max="20" value="8" step="1" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pro Utilization Rate</span>
+                        <span class="slider-value" id="utilization-value">70%</span>
+                    </div>
+                    <input type="range" id="utilization" min="50" max="90" value="70" step="5" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Customer Wait Time (minutes)</span>
+                        <span class="slider-value" id="waittime-value">12</span>
+                    </div>
+                    <input type="range" id="waittime" min="8" max="20" value="12" step="1" oninput="updateModel()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pro NPS Score</span>
+                        <span class="slider-value" id="pronps-value">60</span>
+                    </div>
+                    <input type="range" id="pronps" min="30" max="80" value="60" step="5" oninput="updateModel()">
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>90-Day Growth Projections</h2>
+            <canvas id="growthChart"></canvas>
+        </div>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2>Key Results</h2>
+                <div class="results-grid">
+                    <div class="metric-card">
+                        <h3>Total New Users</h3>
+                        <div class="metric-value" id="total-users">37,500</div>
+                        <div class="metric-change positive">from signups × conversion</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>Retained Users (30-day)</h3>
+                        <div class="metric-value" id="retained-users">18,750</div>
+                        <div class="metric-change positive">50% retention rate</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>Total Bookings (90 days)</h3>
+                        <div class="metric-value" id="total-bookings">168,750</div>
+                        <div class="metric-change positive">from retained users</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>Total Revenue (90 days)</h3>
+                        <div class="metric-value" id="total-revenue">₹6.75 Cr</div>
+                        <div class="metric-change positive">bookings × AOV</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Marketplace Health</h2>
+                <div class="results-grid">
+                    <div class="metric-card">
+                        <h3>Weekly Liquid Bookings</h3>
+                        <div class="metric-value" id="liquid-bookings">13,125</div>
+                        <div class="metric-change positive">North Star Metric</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>Marketplace Health Score</h3>
+                        <div class="metric-value" id="health-score">85/100</div>
+                        <div class="metric-change positive">Excellent</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>LTV:CAC Ratio</h3>
+                        <div class="metric-value" id="ltv-cac">4.2:1</div>
+                        <div class="metric-change positive">Target: >3:1</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <h3>Viral Coefficient</h3>
+                        <div class="metric-value" id="viral-coeff">0.32</div>
+                        <div class="metric-change positive">Target: >0.3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights">
+            <h2>Key Insights</h2>
+            <div id="insights-container"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let chart;
+
+        function updateModel() {
+            const signups = parseInt(document.getElementById('signups').value);
+            const conversion = parseInt(document.getElementById('conversion').value) / 100;
+            const retention = parseInt(document.getElementById('retention').value) / 100;
+            const recurring = parseInt(document.getElementById('recurring').value) / 100;
+            const aov = parseInt(document.getElementById('aov').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const fillrate = parseInt(document.getElementById('fillrate').value) / 100;
+            const density = parseInt(document.getElementById('density').value) / 100;
+            const prochurn = parseInt(document.getElementById('prochurn').value) / 100;
+            const utilization = parseInt(document.getElementById('utilization').value) / 100;
+            const waittime = parseInt(document.getElementById('waittime').value);
+            const pronps = parseInt(document.getElementById('pronps').value);
+
+            document.getElementById('signups-value').textContent = signups.toLocaleString();
+            document.getElementById('conversion-value').textContent = (conversion * 100) + '%';
+            document.getElementById('retention-value').textContent = (retention * 100) + '%';
+            document.getElementById('recurring-value').textContent = (recurring * 100) + '%';
+            document.getElementById('aov-value').textContent = '₹' + aov;
+            document.getElementById('frequency-value').textContent = frequency.toFixed(1);
+            document.getElementById('fillrate-value').textContent = (fillrate * 100) + '%';
+            document.getElementById('density-value').textContent = (density * 100) + '%';
+            document.getElementById('prochurn-value').textContent = (prochurn * 100) + '%';
+            document.getElementById('utilization-value').textContent = (utilization * 100) + '%';
+            document.getElementById('waittime-value').textContent = waittime;
+            document.getElementById('pronps-value').textContent = pronps;
+
+            const totalUsers = Math.round(signups * conversion);
+            const retainedUsers = Math.round(totalUsers * retention);
+            const totalBookings = Math.round(retainedUsers * frequency * 3);
+            const totalRevenue = totalBookings * aov;
+            const liquidBookings = Math.round(totalBookings * fillrate * (waittime <= 15 ? 1 : 0.8) * 0.75);
+            const healthScore = Math.round((fillrate * 30) + (density * 25) + ((1 - prochurn) * 20) + (utilization * 15) + (pronps / 80 * 10));
+            const ltv = aov * frequency * 12 * retention;
+            const cac = 200;
+            const ltvCac = (ltv / cac).toFixed(1);
+            const viralCoeff = (conversion * 0.4 * 0.8).toFixed(2);
+
+            document.getElementById('total-users').textContent = totalUsers.toLocaleString();
+            document.getElementById('retained-users').textContent = retainedUsers.toLocaleString();
+            document.getElementById('total-bookings').textContent = totalBookings.toLocaleString();
+            document.getElementById('total-revenue').textContent = '₹' + (totalRevenue / 10000000).toFixed(2) + ' Cr';
+            document.getElementById('liquid-bookings').textContent = liquidBookings.toLocaleString();
+            document.getElementById('health-score').textContent = healthScore + '/100';
+            document.getElementById('ltv-cac').textContent = ltvCac + ':1';
+            document.getElementById('viral-coeff').textContent = viralCoeff;
+
+            updateChart(totalUsers, retainedUsers, totalBookings);
+            updateInsights(signups, conversion, retention, recurring, fillrate, density, healthScore, ltvCac, viralCoeff);
+        }
+
+        function updateChart(totalUsers, retainedUsers, totalBookings) {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            
+            const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'];
+            const weeklyUsers = weeks.map((_, i) => Math.round(totalUsers / 12 * (1 + i * 0.05)));
+            const weeklyRetained = weeklyUsers.map(u => Math.round(u * 0.5));
+            const weeklyBookings = weeklyRetained.map(u => Math.round(u * 3));
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: weeks,
+                    datasets: [
+                        {
+                            label: 'New Users',
+                            data: weeklyUsers,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Retained Users',
+                            data: weeklyRetained,
+                            borderColor: '#764ba2',
+                            backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Bookings',
+                            data: weeklyBookings,
+                            borderColor: '#f093fb',
+                            backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateInsights(signups, conversion, retention, recurring, fillrate, density, healthScore, ltvCac, viralCoeff) {
+            const insights = [];
+
+            if (retention > 0.5) {
+                insights.push({
+                    title: 'Strong Retention',
+                    text: `Your ${retention * 100}% retention rate is excellent. Retention compounds 3-5x more than acquisition. Focus on maintaining this through recurring bookings and resurrection campaigns.`
+                });
+            } else {
+                insights.push({
+                    title: 'Retention Opportunity',
+                    text: `Your ${retention * 100}% retention rate has room for improvement. A 10% increase in retention would generate ${Math.round(signups * conversion * 0.1 * 3)} more bookings. Prioritize Experiment 5 (Recurring Booking Activation).`
+                });
+            }
+
+            if (fillrate > 0.9) {
+                insights.push({
+                    title: 'Healthy Marketplace',
+                    text: `${fillrate * 100}% fill rate indicates strong supply-demand balance. Your Pro Mentor program (Experiment 13) is working. Continue investing in supply-side growth.`
+                });
+            } else {
+                insights.push({
+                    title: 'Supply Constraint',
+                    text: `${fillrate * 100}% fill rate suggests supply constraints. Adding more demand will degrade experience. Prioritize Experiment 14 (Pro Supply Density) before scaling demand.`
+                });
+            }
+
+            if (density < 0.8) {
+                insights.push({
+                    title: 'Density Gap',
+                    text: `Only ${density * 100}% of neighborhoods are above Pro density threshold. Focus on "Red" neighborhoods with targeted Pro recruitment and signing bonuses.`
+                });
+            }
+
+            if (ltvCac > 3) {
+                insights.push({
+                    title: 'Strong Unit Economics',
+                    text: `LTV:CAC ratio of ${ltvCac}:1 exceeds the 3:1 target. You can afford to increase CAC to accelerate growth. Consider making first booking FREE (Experiment 17).`
+                });
+            } else {
+                insights.push({
+                    title: 'Unit Economics Warning',
+                    text: `LTV:CAC ratio of ${ltvCac}:1 is below target. Focus on retention and frequency to increase LTV before scaling acquisition spend.`
+                });
+            }
+
+            if (viralCoeff > 0.3) {
+                insights.push({
+                    title: 'Viral Growth',
+                    text: `Viral coefficient of ${viralCoeff} indicates exponential growth potential. Your referral program (Experiment 1) is working. Double down on viral loops.`
+                });
+            }
+
+            if (recurring > 0.3) {
+                insights.push({
+                    title: 'Recurring Success',
+                    text: `${recurring * 100}% recurring booking adoption is strong. This creates predictable revenue and higher retention. Consider launching Pronto Plus subscription (Experiment 10).`
+                });
+            }
+
+            const container = document.getElementById('insights-container');
+            container.innerHTML = insights.map(i => `
+                <div class="insight-item">
+                    <h4>${i.title}</h4>
+                    <p>${i.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function setScenario(scenario) {
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (scenario === 'conservative') {
+                document.getElementById('signups').value = 30000;
+                document.getElementById('conversion').value = 60;
+                document.getElementById('retention').value = 40;
+                document.getElementById('recurring').value = 20;
+                document.getElementById('fillrate').value = 85;
+                document.getElementById('density').value = 70;
+            } else if (scenario === 'realistic') {
+                document.getElementById('signups').value = 50000;
+                document.getElementById('conversion').value = 75;
+                document.getElementById('retention').value = 50;
+                document.getElementById('recurring').value = 30;
+                document.getElementById('fillrate').value = 95;
+                document.getElementById('density').value = 80;
+            } else if (scenario === 'optimistic') {
+                document.getElementById('signups').value = 80000;
+                document.getElementById('conversion').value = 85;
+                document.getElementById('retention').value = 60;
+                document.getElementById('recurring').value = 40;
+                document.getElementById('fillrate').value = 98;
+                document.getElementById('density').value = 90;
+            }
+
+            updateModel();
+        }
+
+        updateModel();
+    </script>
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronto Pro Mentor Program - Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .demo-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .phone-mockup {
+            width: 375px;
+            height: 750px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            padding: 20px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            background: white;
+            border-radius: 30px;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .pronto-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pronto-logo h3 {
+            color: #00C853;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .mentor-dashboard {
+            padding: 10px;
+        }
+
+        .mentor-profile {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .mentor-profile .avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .mentor-profile h4 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .mentor-profile .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .mentee-list {
+            margin: 20px 0;
+        }
+
+        .mentee-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mentee-item .avatar {
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .mentee-item .info {
+            flex: 1;
+        }
+
+        .mentee-item .info h6 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .mentee-item .info p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .mentee-item .status {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00C853;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00A843;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #667eea;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5568d3;
+        }
+
+        .session-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .session-card h5 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .session-card p {
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+
+        .session-card .earnings {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-tab.active:hover {
+            background: #5568d3;
+        }
+
+        .impact-metrics {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .impact-metrics h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-row .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .metric-row .value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .metric-row .value.success {
+            color: #00C853;
+        }
+
+        .checklist {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .checklist h5 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .checklist-item.checked .checkbox {
+            background: #667eea;
+            color: white;
+        }
+
+        .checklist-item .text {
+            flex: 1;
+            color: #555;
+        }
+
+        .checklist-item.checked .text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .demo-section {
+                padding: 20px;
+            }
+
+            .phone-mockup {
+                width: 100%;
+                max-width: 375px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pronto Pro Mentor Program</h1>
+            <p>Interactive Prototype - Experiment #13</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>Interactive Demo</h2>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showScreen('dashboard')">Mentor Dashboard</button>
+                <button class="nav-tab" onclick="showScreen('session')">Mentor Session</button>
+                <button class="nav-tab" onclick="showScreen('recruit')">Recruiter Mode</button>
+            </div>
+
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <!-- Screen 1: Mentor Dashboard -->
+                    <div id="dashboard" class="screen active">
+                        <div class="pronto-logo">
+                            <h3>Pronto Pro</h3>
+                        </div>
+                        <div class="mentor-dashboard">
+                            <div class="mentor-profile">
+                                <div class="avatar">👤</div>
+                                <h4>Lakshmi Devi</h4>
+                                <p>Certified Mentor</p>
+                                <div class="badge">⭐ Top 5% Pro</div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="value">12</div>
+                                    <div class="label">Mentees</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">₹6,000</div>
+                                    <div class="label">Earned This Month</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">92%</div>
+                                    <div class="label">Mentee Retention</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">4.9★</div>
+                                    <div class="label">Mentor Rating</div>
+                                </div>
+                            </div>
+
+                            <h5 style="margin: 20px 0 15px;">Your Mentees</h5>
+                            <div class="mentee-list">
+                                <div class="mentee-item">
+                                    <div class="avatar">P</div>
+                                    <div class="info">
+                                        <h6>Priya Sharma</h6>
+                                        <p>Joined 2 weeks ago • 8 bookings</p>
+                                    </div>
+                                    <div class="status active">Active</div>
+                                </div>
+                                <div class="mentee-item">
+                                    <div class="avatar">R</div>
+                                    <div class="info">
+                                        <h6>Rekha Kumari</h6>
+                                        <p>Joined 1 month ago • 24 bookings</p>
+                                    </div>
+                                    <div class="status active">Active</div>
+                                </div>
+                                <div class="mentee-item">
+                                    <div class="avatar">S</div>
+                                    <div class="info">
+                                        <h6>Sunita Devi</h6>
+                                        <p>Onboarding in progress</p>
+                                    </div>
+                                    <div class="status pending">Pending</div>
+                                </div>
+                                <div class="mentee-item">
+                                    <div class="avatar">A</div>
+                                    <div class="info">
+                                        <h6>Anita Singh</h6>
+                                        <p>Completed onboarding</p>
+                                    </div>
+                                    <div class="status completed">Completed</div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="showScreen('session')">Start Mentor Session</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 2: Mentor Session -->
+                    <div id="session" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto Pro</h3>
+                        </div>
+                        <div class="mentor-dashboard">
+                            <div class="session-card">
+                                <h5>Mentor Session with Sunita Devi</h5>
+                                <p>New Pro Onboarding • Day 1 of 3</p>
+                                <div class="earnings">₹500</div>
+                                <p>Session Fee</p>
+                            </div>
+
+                            <div class="checklist">
+                                <h5>Onboarding Checklist</h5>
+                                <div class="checklist-item checked">
+                                    <div class="checkbox">✓</div>
+                                    <div class="text">Welcome & introduction</div>
+                                </div>
+                                <div class="checklist-item checked">
+                                    <div class="checkbox">✓</div>
+                                    <div class="text">App walkthrough & setup</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checkbox"></div>
+                                    <div class="text">Service quality standards</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checkbox"></div>
+                                    <div class="text">Customer communication tips</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checkbox"></div>
+                                    <div class="text">Best areas & times to work</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checkbox"></div>
+                                    <div class="text">Earning optimization strategies</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checkbox"></div>
+                                    <div class="text">First booking practice run</div>
+                                </div>
+                            </div>
+
+                            <h5 style="margin: 20px 0 15px;">Mentor Tips to Share</h5>
+                            <div style="background: #f0f0f0; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                                <strong>💡 Pro Tip:</strong>
+                                <p style="margin-top: 5px; color: #666;">"Morning bookings (7-10 AM) have 30% higher tips. Most customers are getting ready for work and appreciate quick, efficient service."</p>
+                            </div>
+                            <div style="background: #f0f0f0; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                                <strong>📍 Location Tip:</strong>
+                                <p style="margin-top: 5px; color: #666;">"HSR Layout and Koramangala have the highest booking density. Stay in these areas between bookings to minimize travel time."</p>
+                            </div>
+                            <div style="background: #f0f0f0; padding: 15px; border-radius: 10px;">
+                                <strong>⭐ Quality Tip:</strong>
+                                <p style="margin-top: 5px; color: #666;">"Always ask customers if they have specific preferences before starting. A 2-minute conversation prevents rework and builds trust."</p>
+                            </div>
+
+                            <button class="btn btn-secondary" onclick="showScreen('dashboard')">Back to Dashboard</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 3: Recruiter Mode -->
+                    <div id="recruit" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto Pro</h3>
+                        </div>
+                        <div class="mentor-dashboard">
+                            <div class="session-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <h5>Recruiter Mode</h5>
+                                <p>Earn ₹300 for every Pro you recruit who completes their first booking</p>
+                                <div class="earnings">₹1,200</div>
+                                <p>Earned from 4 recruits this month</p>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="value">8</div>
+                                    <div class="label">Leads Assigned</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">4</div>
+                                    <div class="label">Converted</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">50%</div>
+                                    <div class="label">Conversion Rate</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">₹300</div>
+                                    <div class="label">Per Recruit</div>
+                                </div>
+                            </div>
+
+                            <h5 style="margin: 20px 0 15px;">Your Leads</h5>
+                            <div class="mentee-list">
+                                <div class="mentee-item">
+                                    <div class="avatar" style="background: #f093fb;">M</div>
+                                    <div class="info">
+                                        <h6>Meena Kumari</h6>
+                                        <p>Dropped off at document upload</p>
+                                    </div>
+                                    <div class="status pending">Call Now</div>
+                                </div>
+                                <div class="mentee-item">
+                                    <div class="avatar" style="background: #f093fb;">K</div>
+                                    <div class="info">
+                                        <h6>Kavitha R.</h6>
+                                        <p>Completed training, needs first booking</p>
+                                    </div>
+                                    <div class="status active">Active</div>
+                                </div>
+                                <div class="mentee-item">
+                                    <div class="avatar" style="background: #f093fb;">D</div>
+                                    <div class="info">
+                                        <h6>Deepa S.</h6>
+                                        <p>Interested, hasn't started application</p>
+                                    </div>
+                                    <div class="status pending">Contact</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                                <h5 style="margin-bottom: 15px;">Recruiter Script</h5>
+                                <p style="color: #666; font-style: italic;">"Hi [Name], I'm Lakshmi, a Pronto Pro Mentor. I've been with Pronto for 2 years and I earn ₹25,000-30,000 per month. I'd love to help you get started. Can I walk you through the application process?"</p>
+                            </div>
+
+                            <button class="btn btn-primary">Call Lead</button>
+                            <button class="btn btn-secondary" onclick="showScreen('dashboard')">Back to Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Expected Impact</h2>
+            <div class="impact-metrics">
+                <h3>Projected Results (90 Days)</h3>
+                <div class="metric-row">
+                    <span class="label">Pro Activation Rate</span>
+                    <span class="value success">80% (vs. 50% without mentor)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Time to First Booking</span>
+                    <span class="value success"><48 hours</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">30-Day Pro Retention</span>
+                    <span class="value success">70%+ (vs. 45% without mentor)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Pro NPS Score</span>
+                    <span class="value success">>60</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Cost per Pro Acquisition</span>
+                    <span class="value success"><₹1,000 (vs. ₹2,500 traditional)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Supply Footprint Match</span>
+                    <span class="value success">1/10th resources (Lyft playbook)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Program Structure</h2>
+            <div class="impact-metrics">
+                <h3>Mentor Program Details</h3>
+                <div class="metric-row">
+                    <span class="label">Mentor Selection</span>
+                    <span class="value">Top 5% Pros, 100+ bookings, 4.8+ rating</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Mentor Compensation</span>
+                    <span class="value">₹500 per session + ₹200 retention bonus</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Recruiter Compensation</span>
+                    <span class="value">₹300 per activated Pro</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Onboarding Duration</span>
+                    <span class="value">3 sessions over 7 days</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Mentor Badge</span>
+                    <span class="value">Visible to customers (increases trust)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Why This Works (Lyft Playbook)</h2>
+            <div class="impact-metrics">
+                <h3>Key Insights from Ben Lauzier</h3>
+                <div class="metric-row">
+                    <span class="label">Peer-to-Peer > Corporate</span>
+                    <span class="value">Mentors outperform corporate training</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Social Proof</span>
+                    <span class="value">New Pros trust peer earnings claims</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Recognition Lever</span>
+                    <span class="value">Mentors feel "promoted" → higher retention</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Scalable</span>
+                    <span class="value">Match Uber's footprint with 1/10th resources</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Dual Purpose</span>
+                    <span class="value">Recruit during low-demand periods</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(screenId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

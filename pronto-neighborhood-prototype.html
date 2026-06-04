@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronto Neighborhood Social Proof - Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .demo-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .phone-mockup {
+            width: 375px;
+            height: 750px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            padding: 20px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            background: white;
+            border-radius: 30px;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .pronto-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pronto-logo h3 {
+            color: #00C853;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .signup-flow {
+            padding: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .neighborhood-proof {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .neighborhood-proof .count {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .neighborhood-proof .label {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .neighborhood-proof .society {
+            font-size: 16px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .testimonial-carousel {
+            margin: 20px 0;
+        }
+
+        .testimonial {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .testimonial .quote {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .testimonial .author {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .testimonial .location {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00C853;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00A843;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #667eea;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5568d3;
+        }
+
+        .neighborhood-dashboard {
+            padding: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .activity-feed {
+            margin: 20px 0;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .activity-item .icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .activity-item .content {
+            flex: 1;
+        }
+
+        .activity-item .content h6 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .activity-item .content p {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .activity-item .time {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .map-placeholder {
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            height: 200px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 200, 83, 0.3) 0%, transparent 50%);
+        }
+
+        .map-placeholder .label {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-tab.active:hover {
+            background: #5568d3;
+        }
+
+        .impact-metrics {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .impact-metrics h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-row .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .metric-row .value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .metric-row .value.success {
+            color: #00C853;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .demo-section {
+                padding: 20px;
+            }
+
+            .phone-mockup {
+                width: 100%;
+                max-width: 375px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pronto Neighborhood Social Proof</h1>
+            <p>Interactive Prototype - Experiment #4</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>Interactive Demo</h2>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showScreen('signup')">Signup Flow</button>
+                <button class="nav-tab" onclick="showScreen('dashboard')">Neighborhood Dashboard</button>
+                <button class="nav-tab" onclick="showScreen('activity')">Live Activity Feed</button>
+            </div>
+
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <!-- Screen 1: Signup Flow with Social Proof -->
+                    <div id="signup" class="screen active">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="signup-flow">
+                            <h4 style="margin-bottom: 20px;">Join Pronto</h4>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" placeholder="+91 98765 43210" value="+91 98765 43210">
+                            </div>
+                            <div class="form-group">
+                                <label>Your Address</label>
+                                <input type="text" placeholder="Enter your full address" value="123, Prestige Lakeside, HSR Layout">
+                            </div>
+                            
+                            <div class="neighborhood-proof">
+                                <div class="count">247</div>
+                                <div class="label">homes in your society use Pronto</div>
+                                <div class="society">Prestige Lakeside, HSR Layout</div>
+                            </div>
+
+                            <div class="testimonial-carousel">
+                                <h5 style="margin-bottom: 15px;">What your neighbors say:</h5>
+                                <div class="testimonial">
+                                    <div class="quote">"Pronto has been a lifesaver! The 15-minute arrival is real, and the Pros are so professional."</div>
+                                    <div class="author">Priya S.</div>
+                                    <div class="location">Block C, Prestige Lakeside</div>
+                                </div>
+                                <div class="testimonial">
+                                    <div class="quote">"I book weekly now. The recurring option is so convenient, and my Pro knows exactly what I need."</div>
+                                    <div class="author">Rahul M.</div>
+                                    <div class="location">Block A, Prestige Lakeside</div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="showScreen('dashboard')">Join Your Neighbors</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 2: Neighborhood Dashboard -->
+                    <div id="dashboard" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="neighborhood-dashboard">
+                            <h4 style="margin-bottom: 20px;">Your Neighborhood</h4>
+                            <p style="color: #666; margin-bottom: 20px;">Prestige Lakeside, HSR Layout</p>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="value">247</div>
+                                    <div class="label">Active Users</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">1,847</div>
+                                    <div class="label">Bookings This Month</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">4.8★</div>
+                                    <div class="label">Avg Rating</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="value">11 min</div>
+                                    <div class="label">Avg Arrival</div>
+                                </div>
+                            </div>
+
+                            <div class="map-placeholder">
+                                <div class="label">📍 Neighborhood Map View</div>
+                            </div>
+
+                            <h5 style="margin: 20px 0 15px;">Popular Services in Your Society</h5>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <div style="background: #f0f0f0; padding: 10px 15px; border-radius: 20px; font-size: 14px;">
+                                    🧹 Sweeping & Mopping (892 bookings)
+                                </div>
+                                <div style="background: #f0f0f0; padding: 10px 15px; border-radius: 20px; font-size: 14px;">
+                                    🍽️ Utensils (634 bookings)
+                                </div>
+                                <div style="background: #f0f0f0; padding: 10px 15px; border-radius: 20px; font-size: 14px;">
+                                    🚿 Bathroom Cleaning (421 bookings)
+                                </div>
+                                <div style="background: #f0f0f0; padding: 10px 15px; border-radius: 20px; font-size: 14px;">
+                                    👕 Ironing (389 bookings)
+                                </div>
+                            </div>
+
+                            <button class="btn btn-secondary" onclick="showScreen('activity')">View Live Activity</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 3: Live Activity Feed -->
+                    <div id="activity" class="screen">
+                        <div class="pronto-logo">
+                            <h3>Pronto</h3>
+                        </div>
+                        <div class="neighborhood-dashboard">
+                            <h4 style="margin-bottom: 20px;">Live Activity</h4>
+                            <p style="color: #666; margin-bottom: 20px;">Prestige Lakeside, HSR Layout</p>
+
+                            <div class="activity-feed">
+                                <div class="activity-item">
+                                    <div class="icon">✓</div>
+                                    <div class="content">
+                                        <h6>Anita K. completed a booking</h6>
+                                        <p>Bathroom Cleaning • Block D</p>
+                                    </div>
+                                    <div class="time">2 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">⭐</div>
+                                    <div class="content">
+                                        <h6>Vikram S. rated 5 stars</h6>
+                                        <p>"Excellent service!" • Sweeping & Mopping</p>
+                                    </div>
+                                    <div class="time">5 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">🎉</div>
+                                    <div class="content">
+                                        <h6>New user joined from Block B</h6>
+                                        <p>Welcome to Pronto!</p>
+                                    </div>
+                                    <div class="time">8 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">✓</div>
+                                    <div class="content">
+                                        <h6>Meera R. completed a booking</h6>
+                                        <p>Utensils + Kitchen Cleaning • Block A</p>
+                                    </div>
+                                    <div class="time">12 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">🔄</div>
+                                    <div class="content">
+                                        <h6>Rajesh P. booked recurring</h6>
+                                        <p>Weekly Sweeping & Mopping</p>
+                                    </div>
+                                    <div class="time">15 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">⭐</div>
+                                    <div class="content">
+                                        <h6>Priya M. rated 5 stars</h6>
+                                        <p>"My Pro is amazing!" • Ironing</p>
+                                    </div>
+                                    <div class="time">18 min ago</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="icon">✓</div>
+                                    <div class="content">
+                                        <h6>Suresh K. completed a booking</h6>
+                                        <p>Hourly Booking (2 hours) • Block C</p>
+                                    </div>
+                                    <div class="time">22 min ago</div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="showScreen('signup')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Expected Impact</h2>
+            <div class="impact-metrics">
+                <h3>Projected Results (90 Days)</h3>
+                <div class="metric-row">
+                    <span class="label">Signup Conversion Increase</span>
+                    <span class="value success">+25%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Time to First Booking</span>
+                    <span class="value success">-20% (faster)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Neighborhood Dashboard Engagement</span>
+                    <span class="value success">40% of users</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Social Proof Effectiveness</span>
+                    <span class="value success">3.2x higher conversion</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Trust Score Increase</span>
+                    <span class="value success">+35%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Implementation Details</h2>
+            <div class="impact-metrics">
+                <h3>Technical Requirements</h3>
+                <div class="metric-row">
+                    <span class="label">Data Source</span>
+                    <span class="value">Real-time booking analytics</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Geocoding</span>
+                    <span class="value">Google Maps API</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Privacy</span>
+                    <span class="value">Anonymized, aggregated data</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Update Frequency</span>
+                    <span class="value">Real-time for activity feed</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Minimum Threshold</span>
+                    <span class="value">10 users per society to show stats</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Why This Works</h2>
+            <div class="impact-metrics">
+                <h3>Psychological Triggers</h3>
+                <div class="metric-row">
+                    <span class="label">Social Proof</span>
+                    <span class="value">People trust their neighbors</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">FOMO</span>
+                    <span class="value">"Everyone in my society is using this"</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Trust</span>
+                    <span class="value">Local testimonials > generic reviews</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Community</span>
+                    <span class="value">Creates sense of belonging</span>
+                </div>
+                <div class="metric-row">
+                    <span class="label">Transparency</span>
+                    <span class="value">Live activity builds confidence</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(screenId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
